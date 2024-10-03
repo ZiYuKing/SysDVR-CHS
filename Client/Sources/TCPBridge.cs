@@ -216,9 +216,17 @@ namespace SysDVR.Client.Sources
 
 				cancel = token;
 				this.onBuffer = onBuffer;
-				this.host = host;
+				if (host.Contains(':'))
+				{
+                    this.host = host.Split(':')[0];
+                    this.port = int.Parse(host.Split(':')[1]);
+				}
+				else
+				{
+                    this.host = host;
+                    this.port = kind == StreamKind.Video ? TcpBridgeVideoPort : TcpBridgeAudioPort;
+                }
 				this.Channel = kind;
-				this.port = kind == StreamKind.Video ? TcpBridgeVideoPort : TcpBridgeAudioPort;
 				this.StreamName = kind == StreamKind.Video ? "Video stream" : "Audio stream";
 				this.reportMessage = reportMessage;
 			}
